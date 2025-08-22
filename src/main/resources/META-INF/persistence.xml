@@ -8,6 +8,14 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
+            <!-- Implicit Naming Strategy -->
+            <property name="hibernate.implicit_naming_strategy"
+                      value="org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl"/>
+
+            <!-- Physical Naming Strategy -->
+            <property name="hibernate.physical_naming_strategy"
+                      value="org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl"/>
+
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/demo"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
