@@ -8,7 +8,9 @@ import org.example.entities.keys.StudentKey;
 import org.example.persistence.CustomPersistenceUnitInfo;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -26,23 +28,20 @@ public class Main {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
-        Person person = new Person ();
-        person.setName("John");
+        Post p1 = new Post();
+        p1.setTitle("Post 1");
+        p1.setContent("Post 1 cont");
+        Comment c1 = new Comment();
+        c1.setContent("Content comment");
+        Comment c2 = new Comment();
+        c2.setContent("Content comment 2");
 
-        Passport passport = new Passport ();
-        passport.setNumber("ABC123");
 
-        person.setPassport(passport);
-        passport.setPerson(person);
+        p1.setComments(List.of(c1, c2));
+        c1.setPost(p1);
+        c2.setPost(p1);
 
-        em.persist(person);
-//        em.persist(passport);
-
-        User user = new User();
-        user.setName("John");
-        user.setDescription("the description");
-        em.persist(user);
-
+        em.persist(p1);
 
         em.getTransaction().commit();
     }
