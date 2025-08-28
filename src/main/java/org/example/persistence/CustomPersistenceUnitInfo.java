@@ -67,7 +67,8 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
                 "org.example.entities.Person",
                 "org.example.entities.User",
                 "org.example.entities.Post",
-                "org.example.entities.Comment"
+                "org.example.entities.Comment",
+                "org.example.entities.Group"
         );
     }
 

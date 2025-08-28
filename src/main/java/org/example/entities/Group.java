@@ -5,16 +5,22 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "`groups`")
+public class Group {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Group> groups;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinTable(
+            name = "users_groups",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
 
     public int getId() {
         return id;
@@ -32,11 +38,11 @@ public class User {
         this.name = name;
     }
 
-    public List<Group> getGroups() {
-        return groups;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

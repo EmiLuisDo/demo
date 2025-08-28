@@ -8,7 +8,6 @@ import org.example.entities.keys.StudentKey;
 import org.example.persistence.CustomPersistenceUnitInfo;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ public class Main {
 //        EntityManagerFactory emf = null;
         Map<String, String> props = new HashMap<>();
         props.put("hibernate.show_sql", "true");
-        props.put("hibernate.hbm2ddl.auto", "create"); // create - none - update
+        props.put("hibernate.hbm2ddl.auto", "none"); // create - none - update
 
         EntityManagerFactory emf = new HibernatePersistenceProvider()
                 .createContainerEntityManagerFactory(new CustomPersistenceUnitInfo(), props);
@@ -28,20 +27,25 @@ public class Main {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
 
-        Post p1 = new Post();
-        p1.setTitle("Post 1");
-        p1.setContent("Post 1 cont");
-        Comment c1 = new Comment();
-        c1.setContent("Content comment");
-        Comment c2 = new Comment();
-        c2.setContent("Content comment 2");
+        User u1 = new User();
+        u1.setName("User 1");
 
+        User u2 = new User();
+        u2.setName("User 2");
 
-        p1.setComments(List.of(c1, c2));
-        c1.setPost(p1);
-        c2.setPost(p1);
+        Group g1 = new Group();
+        g1.setName("Group 1");
+        Group g2 = new Group();
+        g2.setName("Group 2");
 
-        em.persist(p1);
+        g1.setUsers(List.of(u1, u2));
+        g2.setUsers(List.of(u2));
+
+        u1.setGroups(List.of(g1));
+        u1.setGroups(List.of(g1, g2));
+
+        em.persist(g1);
+        em.persist(g2);
 
         em.getTransaction().commit();
     }
