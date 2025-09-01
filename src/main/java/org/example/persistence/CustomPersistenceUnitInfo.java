@@ -13,9 +13,16 @@ import java.util.List;
 import java.util.Properties;
 
 public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
+
+    private final String puName;
+
+    public CustomPersistenceUnitInfo(String puName) {
+        this.puName = puName;
+    }
+
     @Override
     public String getPersistenceUnitName() {
-        return "application";
+        return this.puName;
     }
 
     @Override
@@ -60,15 +67,18 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
     @Override
     public List<String> getManagedClassNames() {
         return List.of(
-                "org.example.entities.Product",
-                "org.example.entities.Employee",
-                "org.example.entities.Student",
-                "org.example.entities.Passport",
-                "org.example.entities.Person",
-                "org.example.entities.User",
-                "org.example.entities.Post",
-                "org.example.entities.Comment",
-                "org.example.entities.Group"
+//                "org.example.entities.Product",
+//                "org.example.entities.Employee",
+//                "org.example.entities.Student",
+//                "org.example.entities.Passport",
+//                "org.example.entities.Person",
+//                "org.example.entities.User",
+//                "org.example.entities.Post",
+//                "org.example.entities.Comment",
+//                "org.example.entities.Group",
+                "org.example.entities.Book",
+                "org.example.entities.ElectronicDevice",
+                "org.example.entities.Product2"
         );
     }
 
