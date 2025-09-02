@@ -1,38 +1,53 @@
 package org.example.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "product")
 public class Product {
+
     @Id
-    private String code;
-    @Id
-    private long number;
-    private String color;
-    public String getCode() {
-        return code;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String name;
+
+    private BigDecimal price;
+
+    public int getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public long getNumber() {
-        return number;
+    public String getName() {
+        return name;
     }
 
-    public void setNumber(long number) {
-        this.number = number;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getColor() {
-        return color;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                '}';
     }
 }
