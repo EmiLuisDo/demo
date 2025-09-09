@@ -90,14 +90,36 @@ public class Main {
 //        TypedQuery<Long> q = em.createQuery(jpql, Long.class );
 //        q.getResultList().forEach(System.out::println);
 
-        String jpql = """
-                SELECT NEW org.example.dto.CountedEnrollmentForStudent(
-                    s,
-                    ( SELECT COUNT(e) FROM Enrollment e WHERE e.student.id = s.id )
-                )
-                FROM Student s
-                """;
-        TypedQuery<CountedEnrollmentForStudent> q = em.createQuery(jpql, CountedEnrollmentForStudent.class );
+//        String jpql = """
+//                SELECT NEW org.example.dto.CountedEnrollmentForStudent(
+//                    s,
+//                    ( SELECT COUNT(e) FROM Enrollment e WHERE e.student.id = s.id )
+//                )
+//                FROM Student s
+//                """;
+
+//        String jpql = """
+//                SELECT NEW org.example.dto.CountedEnrollmentForStudent(
+//                    s.name,
+//                    COUNT(s)
+//                )
+//                FROM Student s
+//                GROUP BY s.name
+//                """;
+
+//        String jpql = """
+//                SELECT NEW org.example.dto.CountedEnrollmentForStudent(
+//                    s.name,
+//                    COUNT(s)
+//                )
+//                FROM Student s
+//                GROUP BY s.name
+//                HAVING s.name LIKE '%e%'
+//                ORDER BY s.name
+//                """;
+//        TypedQuery<CountedEnrollmentForStudent> q = em.createQuery(jpql, CountedEnrollmentForStudent.class );
+
+        TypedQuery<Student> q = em.createNamedQuery("getAllEnrolledStudents", Student.class);
         q.getResultList().forEach(System.out::println);
 
         em.getTransaction().commit();
