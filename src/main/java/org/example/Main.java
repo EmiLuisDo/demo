@@ -1,9 +1,6 @@
 package org.example;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 import org.example.dto.CountedEnrollmentForStudent;
 import org.example.dto.EnrolledStudent;
 import org.example.entities.*;
@@ -119,8 +116,25 @@ public class Main {
 //                """;
 //        TypedQuery<CountedEnrollmentForStudent> q = em.createQuery(jpql, CountedEnrollmentForStudent.class );
 
-        TypedQuery<Student> q = em.createNamedQuery("getAllEnrolledStudents", Student.class);
-        q.getResultList().forEach(System.out::println);
+//        TypedQuery<Student> q = em.createNamedQuery("getAllEnrolledStudents", Student.class);
+//        q.getResultList().forEach(System.out::println);
+
+
+//        String sql = """
+//                SELECT * FROM student
+//                """;
+//        Query q = em.createNativeQuery(sql, Student.class);
+//        q.getResultList().forEach(System.out::println);
+
+//        String jpql2 = "SELECT ds FROM DistinctStudent ds";
+//        TypedQuery<DistinctStudent> q2 = em.createQuery(jpql2, DistinctStudent.class);
+//        q2.getResultList().forEach(System.out::println);
+
+        StoredProcedureQuery spq = em.createStoredProcedureQuery("GetStudents", Student.class)
+                .registerStoredProcedureParameter("id", Integer.class, ParameterMode.IN)
+                .setParameter("id", 2);
+
+        spq.getResultList().forEach(System.out::println);
 
         em.getTransaction().commit();
     }

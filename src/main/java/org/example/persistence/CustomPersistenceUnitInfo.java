@@ -69,7 +69,8 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
         return List.of(
                 "org.example.entities.Course",
                 "org.example.entities.Enrollment",
-                "org.example.entities.Student"
+                "org.example.entities.Student",
+                "org.example.entities.DistinctStudent"
 
         );
     }
