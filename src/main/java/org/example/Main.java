@@ -1,6 +1,9 @@
 package org.example;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.example.dto.CountedEnrollmentForStudent;
 import org.example.dto.EnrolledStudent;
 import org.example.entities.*;
@@ -10,6 +13,7 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -26,115 +30,54 @@ public class Main {
 
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
+//        ej 1
+//        CriteriaBuilder builder = em.getCriteriaBuilder();
+//        CriteriaQuery<Customer> cq = builder.createQuery(Customer.class) ;
+//        Root<Customer> customerRoot = cq.from(Customer.class);
+//        cq.select(customerRoot);
+//        TypedQuery<Customer> query = em.createQuery(cq);
+//        query.getResultList().forEach(System.out::println);
 
-//        String courseJql = "SELECT c FROM Course c";
-//        TypedQuery<Course> cq = em.createQuery(courseJql, Course.class);
-//        cq.getResultList().forEach(System.out::println);
+        // ej 2
+//        CriteriaBuilder builder = em.getCriteriaBuilder();
+//        CriteriaQuery<String> cq = builder.createQuery(String.class) ;
+//        Root<Customer> customerRoot = cq.from(Customer.class);
+//        cq.select(customerRoot.get("name"));
+//        TypedQuery<String> query = em.createQuery(cq);
+//        query.getResultList().forEach(System.out::println);
+
+//        ej 3
+//        CriteriaBuilder builder = em.getCriteriaBuilder();
+//        CriteriaQuery<Object[]> cq = builder.createQuery(Object[].class) ;
+//        Root<Customer> customerRoot = cq.from(Customer.class);
+//        cq.multiselect(customerRoot.get("name"), customerRoot.get("id"));
+//        TypedQuery<Object[]> query = em.createQuery(cq);
+//        query.getResultList().forEach( or -> System.out.println(or[0] + " " + or[1]));
+
+//        ej 4
+//        CriteriaBuilder builder = em.getCriteriaBuilder();
+//        CriteriaQuery<Object[]> cq = builder.createQuery(Object[].class) ;
+//        Root<Customer> customerRoot = cq.from(Customer.class);
+//        cq.multiselect(customerRoot.get("name"), customerRoot.get("id"))
+//            .where(builder.ge(customerRoot.get("id"), 3), builder.lessThan(customerRoot.get("id"), 5))
+//            .orderBy(builder.desc(customerRoot.get("id"))
+//            );
+//        TypedQuery<Object[]> query = em.createQuery(cq);
+//        query.getResultList().forEach( or -> System.out.println(or[0] + " " + or[1]));
+
+
+//        ej 5
+//        CriteriaBuilder cbuilder = em.getCriteriaBuilder();
+//        CriteriaQuery<Object[]> cq = cbuilder.createQuery(Object[].class);
+//        Root<Customer> customerRoot = cq.from(Customer.class);
+//        cq.multiselect(customerRoot.get("name"), cbuilder.sum(customerRoot.get("id")));
 //
-//        String studentJql = "SELECT s FROM Student s";
-//        TypedQuery<Student> sq = em.createQuery(studentJql, Student.class);
-//        sq.getResultList().forEach(System.out::println);
-//
-//        String enrollmentJql = "SELECT e FROM Enrollment e";
-//        TypedQuery<Enrollment> eq = em.createQuery(enrollmentJql, Enrollment.class);
-//        eq.getResultList().forEach(System.out::println);
-
-//        String jpql = """
-//                SELECT s, e FROM Student s INNER JOIN s.enrollments e
-//                """;
-
-//        String jpql = """
-//                SELECT s, e FROM Student s JOIN s.enrollments e
-//                """;
-
-//        String jpql = """
-//                SELECT s, e FROM Student s, Enrollment e WHERE e.student.id = s.id
-//                """;
-//        String jpql = """
-//                SELECT s, e FROM Student s, Enrollment e WHERE e.student = s
-//                """;
-
-//        String jpql = """
-//                SELECT s, e FROM Student s LEFT JOIN s.enrollments e
-//                """;
-//        TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
-//        List<Object[]> results = query.getResultList();
-//        for(Object[] r: results){
-//            System.out.println(r[0]);
-//            System.out.println(r[1]);
-//        }
-        // para probar lazy loading:
-//        System.out.println(((Enrollment) results.get(0)[1]).getCourse());
-
-//        String jpql = """
-//                SELECT NEW org.example.dto.EnrolledStudent(s, e) FROM Student s LEFT JOIN s.enrollments e
-//                """;
-//        TypedQuery<EnrolledStudent> q = em.createQuery(jpql, EnrolledStudent.class);
-//        q.getResultList().forEach(o -> System.out.println(o.student() + " " + o.enrollment()));
-
-//        String jpql = """
-//                SELECT s FROM Student s WHERE
-//                    ( SELECT COUNT(e) FROM Enrollment e WHERE e.student.id = s.id ) > 1
-//                """;
-//        TypedQuery<Student> q = em.createQuery(jpql, Student.class );
-//        q.getResultList().forEach(System.out::println);
-
-//        String jpql = """
-//                SELECT
-//                    ( SELECT COUNT(e) FROM Enrollment e WHERE e.student.id = s.id )
-//                    FROM Student s
-//                """;
-//        TypedQuery<Long> q = em.createQuery(jpql, Long.class );
-//        q.getResultList().forEach(System.out::println);
-
-//        String jpql = """
-//                SELECT NEW org.example.dto.CountedEnrollmentForStudent(
-//                    s,
-//                    ( SELECT COUNT(e) FROM Enrollment e WHERE e.student.id = s.id )
-//                )
-//                FROM Student s
-//                """;
-
-//        String jpql = """
-//                SELECT NEW org.example.dto.CountedEnrollmentForStudent(
-//                    s.name,
-//                    COUNT(s)
-//                )
-//                FROM Student s
-//                GROUP BY s.name
-//                """;
-
-//        String jpql = """
-//                SELECT NEW org.example.dto.CountedEnrollmentForStudent(
-//                    s.name,
-//                    COUNT(s)
-//                )
-//                FROM Student s
-//                GROUP BY s.name
-//                HAVING s.name LIKE '%e%'
-//                ORDER BY s.name
-//                """;
-//        TypedQuery<CountedEnrollmentForStudent> q = em.createQuery(jpql, CountedEnrollmentForStudent.class );
-
-//        TypedQuery<Student> q = em.createNamedQuery("getAllEnrolledStudents", Student.class);
-//        q.getResultList().forEach(System.out::println);
+//        cq.where(cbuilder.ge(customerRoot.get("id"), 5));
+//        cq.groupBy(customerRoot.get("name"));
+//        TypedQuery<Object[]> query = em.createQuery(cq);
 
 
-//        String sql = """
-//                SELECT * FROM student
-//                """;
-//        Query q = em.createNativeQuery(sql, Student.class);
-//        q.getResultList().forEach(System.out::println);
-
-//        String jpql2 = "SELECT ds FROM DistinctStudent ds";
-//        TypedQuery<DistinctStudent> q2 = em.createQuery(jpql2, DistinctStudent.class);
-//        q2.getResultList().forEach(System.out::println);
-
-        StoredProcedureQuery spq = em.createStoredProcedureQuery("GetStudents", Student.class)
-                .registerStoredProcedureParameter("id", Integer.class, ParameterMode.IN)
-                .setParameter("id", 2);
-
-        spq.getResultList().forEach(System.out::println);
+//        query.getResultList().forEach( or -> System.out.println(or[0] + " " + or[1]));
 
         em.getTransaction().commit();
     }

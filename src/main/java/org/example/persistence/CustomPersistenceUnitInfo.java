@@ -70,8 +70,8 @@ public class CustomPersistenceUnitInfo implements PersistenceUnitInfo {
                 "org.example.entities.Course",
                 "org.example.entities.Enrollment",
                 "org.example.entities.Student",
-                "org.example.entities.DistinctStudent"
-
+                "org.example.entities.DistinctStudent",
+                "org.example.entities.Customer"
         );
     }
 
