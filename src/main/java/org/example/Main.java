@@ -1,9 +1,7 @@
 package org.example;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.example.dto.CountedEnrollmentForStudent;
 import org.example.dto.EnrolledStudent;
 import org.example.entities.*;
@@ -76,8 +74,48 @@ public class Main {
 //        cq.groupBy(customerRoot.get("name"));
 //        TypedQuery<Object[]> query = em.createQuery(cq);
 
+//        CriteriaBuilder builder = em.getCriteriaBuilder();
+//        CriteriaQuery<Tuple> cq = builder.createTupleQuery();
+//        Root<Book> br = cq.from(Book.class);
+//        Join<Book, Author> joinAuthor = br.join("authorsList", JoinType.INNER);
+//        cq.multiselect(br, joinAuthor);
+//        TypedQuery<Tuple> booksR = em.createQuery(cq);
+//        booksR.getResultList().forEach( t -> System.out.println(t.get(0) + " " + t.get(1)));
 
-//        query.getResultList().forEach( or -> System.out.println(or[0] + " " + or[1]));
+//        CriteriaBuilder builder = em.getCriteriaBuilder();
+//        CriteriaQuery<Tuple> cq = builder.createTupleQuery();
+//        Root<Book> br = cq.from(Book.class);
+//        Join<Book, Author> joinAuthor = br.join("authorsList", JoinType.LEFT);
+//        cq.multiselect(br, joinAuthor);
+//        TypedQuery<Tuple> booksR = em.createQuery(cq);
+//        booksR.getResultList().forEach( t -> System.out.println(t.get(0) + " " + t.get(1)));
+
+
+//        CriteriaBuilder builder = em.getCriteriaBuilder();
+//        CriteriaQuery<Tuple> cq = builder.createTupleQuery();
+//        Root<Book> br = cq.from(Book.class);
+//        Join<Book, Author> joinAuthor = br.join("authorsList", JoinType.INNER);
+//        Join<Book, BookShop> joinBookShop = br.join("bookShopList", JoinType.INNER);
+//        cq.multiselect(br, joinAuthor, joinBookShop);
+//        TypedQuery<Tuple> booksR = em.createQuery(cq);
+//        booksR.getResultList().forEach( t -> System.out.println(t.get(0) + " " + t.get(1) + " " + t.get(2)));
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Author> maincq = cb.createQuery(Author.class);
+        Root<Author> mainRoot = maincq.from(Author.class);
+
+        Subquery<Long> subquery = maincq.subquery(Long.class);
+        Root<Author> subRootAuthor =  subquery.correlate(mainRoot);
+        Join<Author, Book> authorBookJoin = subRootAuthor.join("booksList");
+
+        subquery.select(cb.count(authorBookJoin));
+
+        maincq.select(mainRoot).where( cb.greaterThan( subquery, 1L ) );
+
+        TypedQuery<Author> q = em.createQuery(maincq);
+        q.getResultList().forEach(System.out::println);
+
+
 
         em.getTransaction().commit();
     }
